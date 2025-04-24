@@ -2,8 +2,9 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>File Upload</title>
+		<title>Vite App</title>
 	</head>
 	<body>
 		<h1>Streams</h1>
@@ -31,8 +32,6 @@
 				<input type="file" name="file" />
 				<button type="submit">Upload and Compress</button>
 			</form>
-
-			<p id="response"></p>
 		</section>
 		<section>
 			<h2>XHR upload file</h2>
@@ -40,6 +39,6 @@
 			<button id="btn-xhr-start">START</button>
 			<button id="btn-xhr-reset">RESET</button>
 		</section>
-		<script src="./client.js" defer></script>
+		<script type="module" src="/src/main.js"></script>
 	</body>
 </html>

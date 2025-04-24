@@ -11,25 +11,24 @@
 	});
 })();
 
-const response = document.getElementById("response");
-const form = document.getElementById("form-slow");
-console.log("form is", form);
-
-form.addEventListener("submit", async (e) => {
-	e.preventDefault();
-	const formData = new FormData(e.target);
-
-	const responseData = await fetch("http://localhost:5501/upload-slow", {
-		method: "POST",
-		body: formData,
+(() => { 
+	const response = document.getElementById("response");
+	const form = document.getElementById("form-slow");
+	console.log("form is", form);
+	
+	form.addEventListener("submit", async (e) => {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+	
+		const responseData = await fetch("http://localhost:5501/upload-slow", {
+			method: "POST",
+			body: formData,
+		});
+		const data = await responseData.json();
+	
+		alert(data.message);
 	});
-	const data = await responseData.json();
-
-	response.innerText = data.message;
-	alert(data.message);
-});
-
-// (() => {})();
+})();
 
 (() => {
 	const outputList = document.getElementById("xhr-output");

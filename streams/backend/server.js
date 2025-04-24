@@ -10,14 +10,12 @@ import compression from "compression";
 const app = express();
 const port = 5501;
 
-// Качване на файл
 const upload = multer({ dest: "uploads/" });
 
 app.use(express.static("."));
 app.use(cors());
 app.use(compression());
 
-// Компресирай файл при качване
 app.post("/upload", upload.single("file"), (req, res) => {
 	if (!req.file) {
 		res.status(500).json({ message: "No file" }).end();
@@ -67,7 +65,7 @@ app.post("/upload-slow", upload.single("file"), (req, res) => {
 app.get("/xhr-stream", (req, res) => {
 	res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
 	res.setHeader("Transfer-Encoding", "chunked");
-	res.setHeader("Cache-Control", "no-cache"); // <- important
+	res.setHeader("Cache-Control", "no-cache");
 	res.flushHeaders?.();
 
 	let i = 0;
