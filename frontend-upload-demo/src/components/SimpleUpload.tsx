@@ -2,6 +2,6 @@ import React from "react";
 
 export default function SimpleUploader() {
     return (
-        <input type="file"></input>
+        <input className="scheme-normal" type="file"></input>
     );
 };
