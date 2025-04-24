@@ -1,0 +1,8 @@
+uploads/
+
+compressed/
+
+node_modules
+
+
+*.txt
