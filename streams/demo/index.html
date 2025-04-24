@@ -3,7 +3,6 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<script src="./client.js" defer></script>
 		<title>File Upload</title>
 	</head>
 	<body>
@@ -20,30 +19,27 @@
 				<button type="submit">Upload and Compress</button>
 			</form>
 		</section>
+
 		<section>
 			<h2>Slow upload file</h2>
 			<form
 				action="/upload-slow"
 				method="post"
 				enctype="multipart/form-data"
-				id="form"
+				id="form-slow"
 			>
 				<input type="file" name="file" />
 				<button type="submit">Upload and Compress</button>
 			</form>
+
+			<p id="response"></p>
 		</section>
 		<section>
 			<h2>XHR upload file</h2>
-			<form
-				action="/xhr-upload"
-				method="post"
-				enctype="multipart/form-data"
-				id="form"
-			>
-				<input type="file" name="file" />
-				<button type="submit">Upload and Compress</button>
-			</form>
+			<ul id="xhr-output"></ul>
+			<button id="btn-xhr-start">START</button>
+			<button id="btn-xhr-reset">RESET</button>
 		</section>
-
+		<script src="./client.js" defer></script>
 	</body>
 </html>

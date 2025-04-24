@@ -1,10 +1,11 @@
-import express from "express";
-import { createReadStream, createWriteStream } from "fs";
-import { join } from "path";
-import multer from "multer";
-import { createGzip } from "zlib";
 import cors from "cors";
+import express from "express";
+import fs, { createReadStream, createWriteStream } from "fs";
+import multer from "multer";
+import { join } from "path";
+import { createGzip } from "zlib";
 import { SlowWritable } from "./SlowWritable.js";
+import compression from "compression";
 
 const app = express();
 const port = 5501;
@@ -14,6 +15,7 @@ const upload = multer({ dest: "uploads/" });
 
 app.use(express.static("."));
 app.use(cors());
+app.use(compression());
 
 // Компресирай файл при качване
 app.post("/upload", upload.single("file"), (req, res) => {
@@ -25,22 +27,16 @@ app.post("/upload", upload.single("file"), (req, res) => {
 	const sourcePath = req.file.path;
 	const compressedPath = join("compressed", req.file.originalname + ".gz");
 
-	// 1. Създаваме Read и Write стриймове
 	const readStream = createReadStream(sourcePath);
 	const writeStream = createWriteStream(compressedPath);
 	const gzip = createGzip();
 
-	// 2. Pipe верига с обработка
 	readStream
 		.pipe(gzip)
 		.pipe(writeStream)
 		.on("finish", () => {
 			res.json({ message: "Файлът беше компресиран успешно!" });
 		});
-
-	// 3. Какво е Backpressure?
-	// Ако writeStream пише по-бавно от четенето, Node автоматично паузира readStream
-	// pipe() управлява това автоматично, което избягва "backpressure" проблема
 });
 
 app.post("/upload-slow", upload.single("file"), (req, res) => {
@@ -62,24 +58,31 @@ app.post("/upload-slow", upload.single("file"), (req, res) => {
 
 	readStream.on("end", () => {
 		console.log("Read complete!");
-		res.send("File received and written slowly (with backpressure).");
+		res.json({
+			message: "File received and written slowly (with backpressure).",
+		});
 	});
 });
 
 app.get("/xhr-stream", (req, res) => {
-	res.setHeader("Content-Type", "text/plain");
+	res.setHeader("Content-Type", "text/event-stream; charset=utf-8");
 	res.setHeader("Transfer-Encoding", "chunked");
+	res.setHeader("Cache-Control", "no-cache"); // <- important
+	res.flushHeaders?.();
 
 	let i = 0;
 	const interval = setInterval(() => {
 		if (i >= 5) {
-			res.end("\nDone!");
+			res.write("done\n");
+			res.end();
 			clearInterval(interval);
 			return;
 		}
 		res.write(`Chunk ${i}\n`);
+		res.flush();
+		console.log(`xhr chunk ${i}`);
 		i++;
-	}, 1000);
+	}, 250);
 });
 
 app.listen(port, () => {

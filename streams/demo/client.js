@@ -1,4 +1,4 @@
-(async () => {
+(() => {
 	const form = document.getElementById("form");
 	form.addEventListener("submit", async (e) => {
 		e.preventDefault();
@@ -11,21 +11,69 @@
 	});
 })();
 
+const response = document.getElementById("response");
+const form = document.getElementById("form-slow");
+console.log("form is", form);
+
+form.addEventListener("submit", async (e) => {
+	e.preventDefault();
+	const formData = new FormData(e.target);
+
+	const responseData = await fetch("http://localhost:5501/upload-slow", {
+		method: "POST",
+		body: formData,
+	});
+	const data = await responseData.json();
+
+	response.innerText = data.message;
+	alert(data.message);
+});
+
+// (() => {})();
+
 (() => {
+	const outputList = document.getElementById("xhr-output");
 	const btnStart = document.getElementById("btn-xhr-start");
 	const btnReset = document.getElementById("btn-xhr-reset");
-	btnReset.addEventListener("click", () => {});
-	btnStart.addEventListener("click", () => {});
+
+	let lastLength = 0;
+
+	const xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = () => {
+		xhr.onreadystatechange = () => {
+			if (xhr.readyState === 3) {
+				const newData = xhr.responseText.slice(lastLength);
+				lastLength = xhr.responseText.length;
+				const item = document.createElement("li");
+				item.innerText = `Chunk received: ${newData}`;
+				outputList.appendChild(item);
+			}
+		};
+	};
+	btnStart.addEventListener("click", () => {
+		XHRStartStreaming(xhr);
+	});
+	btnReset.addEventListener("click", () => {
+		XHRResetStreaming(xhr, outputList);
+	});
 })();
 
-function XHRStreaming() {
-	const xhr = new XMLHttpRequest();
-	xhr.open("GET", "/streaming-endpoint", true);
+/**
+ *
+ * @param {XMLHttpRequest} xhr
+ */
+function XHRStartStreaming(xhr) {
+	xhr.open("GET", "http://localhost:5501/xhr-stream", true);
 
-	xhr.onreadystatechange = () => {
-		if (xhr.readyState === 3) {
-			console.log("Chunk received:", xhr.responseText);
-		}
-	};
 	xhr.send();
+}
+
+/**
+ *
+ * @param {XMLHttpRequest} xhr
+ * @param {HTMLUListElement} outputList
+ */
+function XHRResetStreaming(xhr, outputList) {
+	xhr.abort();
+	outputList.replaceChildren();
 }

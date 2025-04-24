@@ -6,6 +6,6 @@ export class SlowWritable extends Writable {
 		setTimeout(() => {
 			process.stdout.write(`Writing chunk (${chunk.length} bytes)...\n`);
 			callback();
-		}, 250); // slow "disk"
+		}, 200); // slow "disk"
 	}
 }
