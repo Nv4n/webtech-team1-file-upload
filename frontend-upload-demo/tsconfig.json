@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES6", // Ensure ES6 target for compatibility with ESM
+    "module": "ESNext", // Use ESNext module system (for ESM)
+    "moduleResolution": "node", // Resolve modules like Node.js
+    "esModuleInterop": true, // Ensure compatibility between CommonJS and ESM
+    "outDir": "./dist", // Output compiled files here (optional)
+    "strict": true // Optional but recommended for strict type checking
+  },
+  "include": [
+    "src/**/*.ts"
+, "src/server.js"  ]
+}
