@@ -4,6 +4,7 @@ import { join } from "path";
 import multer from "multer";
 import { createGzip } from "zlib";
 import cors from "cors";
+import { SlowWritable } from "./SlowWritable.js";
 
 const app = express();
 const port = 5501;
@@ -41,16 +42,6 @@ app.post("/upload", upload.single("file"), (req, res) => {
 	// Ако writeStream пише по-бавно от четенето, Node автоматично паузира readStream
 	// pipe() управлява това автоматично, което избягва "backpressure" проблема
 });
-
-class SlowWritable extends Writable {
-	_write(chunk, encoding, callback) {
-		// Simulate delay
-		setTimeout(() => {
-			process.stdout.write(`Writing chunk (${chunk.length} bytes)...\n`);
-			callback();
-		}, 200); // slow "disk"
-	}
-}
 
 app.post("/upload-slow", upload.single("file"), (req, res) => {
 	const sourcePath = req.file.path;
