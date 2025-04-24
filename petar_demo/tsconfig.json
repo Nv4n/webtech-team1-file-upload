@@ -1,12 +1,12 @@
 {
     "compilerOptions": {
-      "target": "es6",      // Or a more recent ECMAScript version
-      "module": "commonjs",   // Or "esnext" if you're using modern modules
+      "target": "es6",
+      "module": "commonjs",
       "moduleResolution": "node",
-      "esModuleInterop": true, // Important for importing CommonJS modules
+      "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
-      "strict": true,           // Enable strict type checking
-      "outDir": "dist"         // Output directory for compiled JavaScript files
+      "strict": true,
+      "outDir": "dist"
     },
-    "include": ["*.ts"]       // Include all .ts files in the current directory
+    "include": ["*.ts"]
   }
