@@ -1,0 +1,22 @@
+{
+  "name": "web-tech",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "byname": " node filename_upload.js",
+    "byguid": " node guid_upload.js",
+    "bysharding": " node sharding_upload.js",
+    "bytimestamp": " node timestamp_upload.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.1",
+    "typescript": "^5.8.3"
+  }
+}
